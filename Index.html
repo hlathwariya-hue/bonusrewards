@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bonus Rewards</title>
+
+<style>
+body{
+  background:#e9ecf3;
+  font-family:Segoe UI, Arial;
+}
+
+.phone{
+  width:360px;
+  margin:20px auto;
+  background:#fff;
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+}
+
+.header{
+  background:linear-gradient(135deg,#4b2cff,#7b3cff);
+  color:#fff;
+  padding:14px;
+  font-size:18px;
+  font-weight:600;
+}
+
+.screen{
+  padding:16px;
+}
+
+h3{
+  margin-top:5px;
+  color:#4b2cff;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  background:linear-gradient(135deg,#4b2cff,#7b3cff);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:15px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.box{
+  background:#f4f6ff;
+  padding:12px;
+  border-radius:10px;
+  margin:10px 0;
+}
+
+.balance{
+  background:#e8f0ff;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+<div class="header">
+📱 Bonus Rewards
+<span style="float:right;cursor:pointer" onclick="openMenu()">☰</span>
+</div>
+
+<!-- LOGIN -->
+<div class="screen" id="login">
+<h3>Login</h3>
+<input placeholder="Mobile Number">
+<input type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p style="text-align:center">New user?</p>
+<button onclick="show('signup')">Sign Up</button>
+</div>
+
+<!-- SIGN UP -->
+<div class="screen" id="signup" style="display:none">
+<h3>Sign Up</h3>
+<input placeholder="Mobile Number">
+<input placeholder="Create Password">
+<button onclick="login()">Create Account</button>
+<button onclick="show('login')">⬅ Back to Login</button>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="home" style="display:none">
+<div class="balance">
+Balance: ₹<span id="balance">0.00</span>
+</div>
+
+<div class="box">
+✍️ Shayari likho aur ad dekho  
+<button onclick="watchAd()">Watch Ad (+₹0.10)</button>
+</div>
+
+<div class="box">
+⚽🏏 Daily Sports Bonus  
+<button onclick="dailyAd()">Watch 30s (+₹0.20)</button>
+</div>
+</div>
+
+<!-- MENU -->
+<div class="screen" id="menu" style="display:none">
+<button onclick="openHome()">🏠 Home</button>
+<button onclick="openRefer()">👥 Refer & Earn</button>
+<button onclick="openWithdraw()">💸 Withdraw</button>
+<button onclick="openCompany()">🏢 Company</button>
+</div>
+
+<!-- REFER -->
+<div class="screen" id="refer" style="display:none">
+<h3>Refer & Earn</h3>
+<p>Your Refer Code</p>
+<h2 id="referCode"></h2>
+<button onclick="openHome()">⬅ Back</button>
+</div>
+
+<!-- WITHDRAW -->
+<div class="screen" id="withdraw" style="display:none">
+<h3>Withdraw Bonus Rewards</h3>
+<input placeholder="UPI ID">
+<p style="text-align:center">OR</p>
+<input placeholder="Bank Account Number">
+<input placeholder="IFSC Code">
+<button onclick="withdraw()">Submit Request</button>
+<button onclick="openHome()">⬅ Back</button>
+</div>
+
+<!-- COMPANY -->
+<div class="screen" id="company" style="display:none">
+<h3>About Company</h3>
+<p><b>App:</b> Bonus Rewards</p>
+<p><b>Category:</b> Entertainment</p>
+<p><b>Note:</b> No loan, no credit, no finance</p>
+<button onclick="openHome()">⬅ Back</button>
+</div>
+
+</div>
+
+<script>
+let balance = 0;
+let adsToday = 0;
+let dailySeen = false;
+let lastDate = localStorage.getItem("date") || "";
+
+let today = new Date().toDateString();
+if(today !== lastDate){
+  adsToday = 0;
+  dailySeen = false;
+  localStorage.setItem("date", today);
+}
+
+let refer = "BR" + Math.floor(100000 + Math.random()*900000);
+document.getElementById("referCode").innerText = refer;
+
+function login(){
+  show("home");
+}
+
+function watchAd(){
+  if(adsToday >= 20){
+    alert("Today's limit reached");
+    return;
+  }
+  adsToday++;
+  balance += 0.10;
+  update();
+}
+
+function dailyAd(){
+  if(dailySeen){
+    alert("Come tomorrow");
+    return;
+  }
+  dailySeen = true;
+  balance += 0.20;
+  update();
+}
+
+function withdraw(){
+  if(balance < 100){
+    alert("Minimum ₹100 required");
+    return;
+  }
+  alert("Withdraw request submitted (Demo)");
+}
+
+function update(){
+  document.getElementById("balance").innerText = balance.toFixed(2);
+}
+
+function openMenu(){show("menu")}
+function openHome(){show("home")}
+function openRefer(){show("refer")}
+function openWithdraw(){show("withdraw")}
+function openCompany(){show("company")}
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+</script>
+
+</body>
+</html>
